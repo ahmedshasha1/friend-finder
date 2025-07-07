@@ -42,8 +42,12 @@ public class ReactServiceImpl implements ReactService {
 
         if (existingReact.isPresent()) {
             Reacts react = existingReact.get();
-            react.setLike(isLike);
-            reactsRepo.save(react);
+            if (react.isLike() == isLike) {
+                reactsRepo.delete(react);
+            } else {
+                react.setLike(isLike);
+                reactsRepo.save(react);
+            }
         } else {
             Reacts newReact = new Reacts();
             newReact.setLike(isLike);
